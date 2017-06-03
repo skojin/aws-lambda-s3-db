@@ -1,0 +1,27 @@
+{
+  "name": "s3_db",
+  "version": "1.0.0",
+  "description": "simple key value database with AWS S3 as storage",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/skojin/aws-lambda-s3-db.git"
+  },
+  "keywords": [
+    "aws",
+    "lambda",
+    "database",
+    "s3",
+    "rest",
+    "key-value"
+  ],
+  "author": "sergey.kojin@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/skojin/aws-lambda-s3-db/issues"
+  },
+  "homepage": "https://github.com/skojin/aws-lambda-s3-db#readme"
+}
