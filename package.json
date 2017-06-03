@@ -4,7 +4,9 @@
   "description": "simple key value database with AWS S3 as storage",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create": "claudia create --region us-east-1 --deploy-proxy-api --handler main.handler --profile claudia",
+    "update": "claudia update --profile claudia "
   },
   "repository": {
     "type": "git",
