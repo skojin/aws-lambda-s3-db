@@ -50,6 +50,16 @@ function getValue(event, context, key) {
   });
 }
 
+function deleteObj(event, context, key) {
+  s3.deleteObject({ Bucket: BUCKET, Key: key }, function (err, data) {
+    if (err) {
+      context.fail('fail')
+    } else {
+      returnSucceed(context, 'ok')
+    }
+  });
+}
+
 function addValue(event, context, key) {
   var value = (event.queryStringParameters || {}).v || event.body
   var itemKey = key + '/' + (new Date()).getTime()
@@ -120,6 +130,7 @@ exports.handler = function (event, context) {
   var err, body = route(event, context, {
     'SET': setValue,
     'GET': getValue,
+    'DEL': deleteObj,
     'ADD': addValue,
     'KEYS': getListKeys,
     'LIST': getList
