@@ -73,9 +73,34 @@ function getListKeys(event, context, key) {
     if (err) {
       context.fail(err)
     } else {
-      console.log('KEYS', data)
       var keys = data.Contents.map(i => i.Key)
       returnSucceed(context, JSON.stringify(keys))
+    }
+  })
+}
+
+function getList(event, context, key) {
+  s3.listObjectsV2({ Bucket: BUCKET, Prefix: key }, function (err, data) {
+    if (err) {
+      context.fail(err)
+    } else {
+      var resultHash = {}
+      var left = data.Contents.length
+      data.Contents.forEach(function (obj) {
+        s3.getObject({ Bucket: BUCKET, Key: obj.Key }, function (err, data) {
+          left--;
+          if (!err) {
+            resultHash[obj.Key] = data.Body.toString()
+            if (left === 0) {
+              var result = []
+              for (var kk in resultHash) {
+                result.push({ "k": kk, "v": resultHash[kk] })
+              }
+              returnSucceed(context, JSON.stringify(result))
+            }
+          }
+        })
+      })
     }
   })
 }
@@ -96,7 +121,8 @@ exports.handler = function (event, context) {
     'SET': setValue,
     'GET': getValue,
     'ADD': addValue,
-    'KEYS': getListKeys
+    'KEYS': getListKeys,
+    'LIST': getList
   })
 
 };
