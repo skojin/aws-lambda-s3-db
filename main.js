@@ -50,6 +50,37 @@ function getValue(event, context, key) {
   });
 }
 
+function addValue(event, context, key) {
+  var value = (event.queryStringParameters || {}).v || event.body
+  var itemKey = key + '/' + (new Date()).getTime()
+  s3.putObject({
+    Bucket: BUCKET,
+    Key: itemKey,
+    Body: value,
+    ContentType: 'text/plain'
+  }, function (err) {
+    if (err) {
+      console.log("Error SET object " + key + " from bucket " + BUCKET);
+      context.fail('fail')
+    } else {
+      returnSucceed(context, 'ok')
+    }
+  });
+}
+
+function getListKeys(event, context, key) {
+  s3.listObjectsV2({ Bucket: BUCKET, Prefix: key }, function (err, data) {
+    if (err) {
+      context.fail(err)
+    } else {
+      console.log('KEYS', data)
+      var keys = data.Contents.map(i => i.Key)
+      returnSucceed(context, JSON.stringify(keys))
+    }
+  })
+}
+
+
 function returnSucceed(context, body, code = 200) {
   context.succeed({
     statusCode: code,
@@ -64,6 +95,8 @@ exports.handler = function (event, context) {
   var err, body = route(event, context, {
     'SET': setValue,
     'GET': getValue,
+    'ADD': addValue,
+    'KEYS': getListKeys
   })
 
 };
