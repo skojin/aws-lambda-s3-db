@@ -96,6 +96,9 @@ function getList(event, context, key) {
     } else {
       var resultHash = {}
       var left = data.Contents.length
+      if( left === 0 ){
+        return returnSucceed(context, JSON.stringify([]))
+      }
       data.Contents.forEach(function (obj) {
         s3.getObject({ Bucket: BUCKET, Key: obj.Key }, function (err, data) {
           left--;
